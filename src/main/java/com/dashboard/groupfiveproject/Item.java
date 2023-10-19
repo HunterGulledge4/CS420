@@ -1,6 +1,6 @@
 package com.dashboard.groupfiveproject;
 
-public class Item implements ItemInterface {
+public class Item {
     public Item(){
 
     }
