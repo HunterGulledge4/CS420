@@ -1,6 +1,6 @@
 package com.dashboard.groupfiveproject;
 
-public class ItemContainer implements ContainerInterface {
+public class ItemContainer {
     public ItemContainer(){
         
     }
