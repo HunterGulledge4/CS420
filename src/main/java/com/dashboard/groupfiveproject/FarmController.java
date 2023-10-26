@@ -3,7 +3,7 @@ package com.dashboard.groupfiveproject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class FarmController {
     @FXML
     private Label welcomeText;
 

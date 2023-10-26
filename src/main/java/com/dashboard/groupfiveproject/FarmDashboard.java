@@ -7,12 +7,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class FarmDashboard extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello, Welcome!");
+        FXMLLoader fxmlLoader = new FXMLLoader(FarmDashboard.class.getResource("farm-dashboard-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 900, 1100);
+        stage.setTitle("Welcome to Your AgriTech Farm Dashboard!");
         stage.setScene(scene);
         stage.show();
     }
