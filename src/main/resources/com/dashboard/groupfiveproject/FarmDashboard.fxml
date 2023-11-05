@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dashboard.groupfiveproject.FarmController">
   <children>
     <Rectangle fx:id="commandCenter" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="150.0" layoutX="525.0" layoutY="50.0" stroke="BLACK" strokeType="INSIDE" width="150.0" />
     <Rectangle fx:id="barn" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="200.0" layoutX="350.0" layoutY="580.0" stroke="BLACK" strokeType="INSIDE" width="270.0" />
