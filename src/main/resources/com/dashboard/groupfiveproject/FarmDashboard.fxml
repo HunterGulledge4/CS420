@@ -10,9 +10,11 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dashboard.groupfiveproject.FarmController">
   <children>
@@ -70,7 +72,7 @@
                </font>
             </Label>
             <Button fx:id="visitFarmItem" layoutX="101.0" layoutY="598.0" mnemonicParsing="false" text="Visit Farm Item" />
-            <Button fx:id="scanFarm" layoutX="113.0" layoutY="656.0" mnemonicParsing="false" text="Scan Farm" />
+            <Button fx:id="scanFarm" layoutX="113.0" layoutY="656.0" mnemonicParsing="false" onMouseClicked="#initializescanFarmButton" text="Scan Farm" />
             <Label layoutX="68.0" layoutY="623.0" text="**Be sure to Select a Farm Item to Visit**">
                <font>
                   <Font size="9.0" />
@@ -88,5 +90,6 @@
             <Font size="13.0" />
          </font>
       </Label>
+      <Circle fx:id="drone" fill="DODGERBLUE" layoutX="600.0" layoutY="125.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
   </children>
 </AnchorPane>
