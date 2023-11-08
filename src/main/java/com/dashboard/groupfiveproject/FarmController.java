@@ -1,7 +1,11 @@
 package com.dashboard.groupfiveproject;
 
+import javafx.geometry.Rectangle2D;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
-
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
@@ -10,10 +14,10 @@ import javafx.scene.control.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-public class FarmController {
+import static javafx.scene.paint.Color.*;
 
-    @FXML
-    private Rectangle barn;
+
+public class FarmController {
 
     @FXML
     private Button buttonSubmit;
@@ -23,15 +27,6 @@ public class FarmController {
 
     @FXML
     private ChoiceBox<String> crudChoiceBox;
-
-    @FXML
-    private ChoiceBox<String> commandChoiceBox;
-
-    @FXML
-    private Rectangle cow;
-
-    @FXML
-    private Rectangle cropField;
 
     @FXML
     private Circle drone;
@@ -79,13 +74,16 @@ public class FarmController {
     private Label labelWidth;
 
     @FXML
-    private Rectangle liveStockArea;
-
-    @FXML
-    private Rectangle milkStorage;
-
-    @FXML
     private Button scanFarm;
+
+    @FXML
+    private TreeView<FarmObject> treeView;
+
+    @FXML
+    private AnchorPane anchorPane;
+
+    @FXML
+    private Button visitFarmItem;
   
     public void initializescanFarmButton(){
         scanFarm.setOnAction(event -> setStartingPosition(-290,-110));
@@ -173,22 +171,21 @@ public class FarmController {
         BackToStartPosition.play();
     }
 
-    @FXML
-    private TreeView<FarmObject> treeView;
-
-    @FXML
-    private Button visitFarmItem;
-
-     public void initializevisitFarmItemButton(FarmObject object){
-        double x = (object.getLocationX());
-        double y = (object.getLocationY());
+    public void initializevisitFarmItemButton(){
+        //double x = (double) farmObject.getLocationX();
+        //double y = (double) farmObject.getLocationY();
+        TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
+        double x = selectedItem.getValue().getLocationX();
+        double y = selectedItem.getValue().getLocationY();
         visitFarmItem.setOnAction(event -> setStartingPositionOfFarmItem(x,y));
         double InitialSpotX = drone.getCenterX();
         double InitialSpotY = drone.getCenterY();
         System.out.println(InitialSpotX +" "+ "This is the x coordinate for the command center");
         System.out.println(InitialSpotY +" "+ "This is the Y coordinate for the command center");
     }
-        public void setStartingPositionOfFarmItem(double targetX, double targetY) {
+
+
+    public void setStartingPositionOfFarmItem(double targetX, double targetY) {
         double dx = targetX - drone.getCenterX();
         double dy = targetY - drone.getCenterY();
         System.out.println(dx + " " + "This is the starting x coordinate");
@@ -224,19 +221,32 @@ public class FarmController {
         int entryWidth = Integer.parseInt(entryFieldWidth.getText().isBlank() ? "0" : entryFieldWidth.getText());
         int entryHeight = Integer.parseInt(entryFieldHeight.getText().isBlank() ? "0" : entryFieldHeight.getText());
 
+        //Color clear = new Color(255,255,255,0);
+        Rectangle rectangle2 = new Rectangle(entryLocationX, entryLocationY, entryWidth, entryHeight);
+        //rectangle2.setFill(clear);
+        //rectangle2.setStroke(BLACK);
+        //rectangle2.setStrokeType(StrokeType.INSIDE);
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
         FarmObject farmObject = new FarmObject(entryName, entryPrice, entryLocationX, entryLocationY, entryLength,
-                entryWidth, entryHeight);
+                entryWidth, entryHeight, rectangle2);
 
         TreeItem<FarmObject> object = new TreeItem<FarmObject>(farmObject);
         selectedItem.getChildren().add(object);
 
+        drawRect(rectangle2, entryLocationX, entryLocationY, entryWidth, entryHeight);
     }
 
     public void Deleteitem() {
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
+        //deleteRect(selectedItem.getValue().getRectangle());
+
+        Rectangle rectangle10 = selectedItem.getValue().getRectangle();
+        anchorPane.getChildren().remove(rectangle10);
+
         selectedItem.getParent().getChildren().remove(selectedItem);
+
+        //deleteRect(rectangle10);
     }
 
     public void Additemcontainer() {
@@ -247,19 +257,24 @@ public class FarmController {
         int entryLength = Integer.parseInt(entryFieldLength.getText().isBlank() ? "0" : entryFieldLength.getText());
         int entryWidth = Integer.parseInt(entryFieldWidth.getText().isBlank() ? "0" : entryFieldWidth.getText());
         int entryHeight = Integer.parseInt(entryFieldHeight.getText().isBlank() ? "0" : entryFieldHeight.getText());
+        Rectangle rectangle3 = new Rectangle(entryLocationX, entryLocationY, entryWidth, entryHeight);
 
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
         FarmObject farmObject = new FarmObject(entryName, entryPrice, entryLocationX, entryLocationY, entryLength,
-                entryWidth, entryHeight);
+                entryWidth, entryHeight, rectangle3);
 
         TreeItem<FarmObject> object = new TreeItem<FarmObject>(farmObject);
         selectedItem.getChildren().add(object);
+
+        drawRect(rectangle3, entryLocationX, entryLocationY, entryWidth, entryHeight);
     }
 
     public void Deleteitemcontainer() {
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
+        //deleteRect(selectedItem.getValue().getRectangle());
         selectedItem.getParent().getChildren().remove(selectedItem);
+
     }
 
     public void Changestuff() {
@@ -274,6 +289,9 @@ public class FarmController {
         }
         if (!entryFieldLocationX.getText().isBlank()) {
             selectedItem.getValue().setLocationX(Integer.parseInt(entryFieldLocationX.getText()));
+            selectedItem.getValue().setRectangle(selectedItem.getValue().getRectangle(), Integer.parseInt(entryFieldLocationX.getText()),
+                    Integer.parseInt(entryFieldLocationY.getText()), Integer.parseInt(entryFieldWidth.getText()),
+                    Integer.parseInt(entryFieldHeight.getText()));
         }
         if (!entryFieldLocationY.getText().isBlank()) {
             selectedItem.getValue().setLocationY(Integer.parseInt(entryFieldLocationY.getText()));
@@ -291,8 +309,12 @@ public class FarmController {
     }
 
     public void initialize() {
-        crudChoiceBox.setItems(FXCollections.observableArrayList("Add Item", "Delete Item", "Add Item Container", "Delete Item Container", "Change Value(s)");
-        TreeItem<FarmObject> rootItem = new TreeItem<>(new FarmObject("Root", 0, 0, 0, 0, 0, 0));                                                                                                  
+        Rectangle commandCenterRectangle = new Rectangle();
+        drawRect(commandCenterRectangle, 525,50,150,150);
+
+        crudChoiceBox.setItems(FXCollections.observableArrayList("Add Item", "Delete Item", "Add Item Container", "Delete Item Container", "Change Value(s)"));
+        TreeItem<FarmObject> rootItem = new TreeItem<>(new FarmObject("Root", 0, 0, 0,
+                0, 0, 0, commandCenterRectangle));
         treeView.setRoot(rootItem);
      
         treeView.setCellFactory(param -> new TreeCell<FarmObject>() {
@@ -309,4 +331,45 @@ public class FarmController {
             }
         });
     }
+
+    /*
+    public Rectangle2D drawRectangle() {
+        TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
+        double x = selectedItem.getValue().getLocationX();
+        double y = selectedItem.getValue().getLocationY();
+        double width = selectedItem.getValue().getWidth();
+        double height = selectedItem.getValue().getHeight();
+
+        return new Rectangle2D(x, y, width, height);
+    }
+     */
+
+    @FXML
+    public void drawRect(Rectangle r, double x, double y, double width, double height){
+        //Rectangle2D r = new Rectangle2D(x, y, width, height);
+        Color clear = new Color(0,0,0,0);
+        Rectangle rect = new Rectangle();
+        rect.setX(x);
+        rect.setY(y);
+        rect.setWidth(width);
+        rect.setHeight(height);
+        rect.setStrokeType(StrokeType.INSIDE);
+        rect.setStroke(BLACK);
+        rect.setFill(clear);
+        anchorPane.getChildren().add(rect);
+    }
+/*
+    public void deleteRect(Rectangle rectangle){
+        double ex = rectangle.getX();
+        double why = rectangle.getY();
+
+        ex += 5000;
+        why += 5000;
+        rectangle.setLayoutX(ex);
+        rectangle.setLayoutY(why);
+
+        //rectangle.setWidth(0);
+    }
+ */
+
 }
