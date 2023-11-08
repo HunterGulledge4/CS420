@@ -181,6 +181,8 @@ public class FarmController {
     }
 
     public void initialize() {
+
+        crudChoiceBox.setItems(FXCollections.observableArrayList("Add Item", "Delete Item", "Add Item Container", "Delete Item Container", "Change Value(s)");
         // Initialize the root TreeItem and set it as the root of the TreeView
         TreeItem<FarmObject> rootItem = new TreeItem<>(new FarmObject("Root", 0, 0, 0, 0, 0, 0)); // You can set default
                                                                                                   // values

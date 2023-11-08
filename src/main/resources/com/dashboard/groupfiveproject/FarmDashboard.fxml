@@ -75,13 +75,8 @@
                         <String fx:value="Add Item" />
                         <String fx:value="Delete Item" />
                         <String fx:value="Add Item Container" />
-                        <String fx:value="Change Name" />
-                        <String fx:value="Change Price" />
-                        <String fx:value="Change X Location" />
-                        <String fx:value="Change Y Location" />
-                        <String fx:value="Change Length" />
-                        <String fx:value="Change Width" />
-                        <String fx:value="Change Height" />
+                        <String fx:value="Delete Item Container" />
+                        <String fx:value="Change Value(s)" /> 
                     </FXCollections>
                 </items>
             </ChoiceBox>    
