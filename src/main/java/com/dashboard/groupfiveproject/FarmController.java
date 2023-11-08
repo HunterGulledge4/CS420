@@ -14,7 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-import static javafx.scene.paint.Color.BLACK;
+import static javafx.scene.paint.Color.*;
 
 
 public class FarmController {
@@ -185,7 +185,7 @@ public class FarmController {
     }
 
 
-        public void setStartingPositionOfFarmItem(double targetX, double targetY) {
+    public void setStartingPositionOfFarmItem(double targetX, double targetY) {
         double dx = targetX - drone.getCenterX();
         double dy = targetY - drone.getCenterY();
         System.out.println(dx + " " + "This is the starting x coordinate");
@@ -220,8 +220,12 @@ public class FarmController {
         int entryLength = Integer.parseInt(entryFieldLength.getText().isBlank() ? "0" : entryFieldLength.getText());
         int entryWidth = Integer.parseInt(entryFieldWidth.getText().isBlank() ? "0" : entryFieldWidth.getText());
         int entryHeight = Integer.parseInt(entryFieldHeight.getText().isBlank() ? "0" : entryFieldHeight.getText());
-        Rectangle rectangle2 = new Rectangle(entryLocationX, entryLocationY, entryWidth, entryHeight);
 
+        //Color clear = new Color(255,255,255,0);
+        Rectangle rectangle2 = new Rectangle(entryLocationX, entryLocationY, entryWidth, entryHeight);
+        //rectangle2.setFill(clear);
+        //rectangle2.setStroke(BLACK);
+        //rectangle2.setStrokeType(StrokeType.INSIDE);
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
         FarmObject farmObject = new FarmObject(entryName, entryPrice, entryLocationX, entryLocationY, entryLength,
@@ -235,7 +239,14 @@ public class FarmController {
 
     public void Deleteitem() {
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
+        //deleteRect(selectedItem.getValue().getRectangle());
+
+        Rectangle rectangle10 = selectedItem.getValue().getRectangle();
+        anchorPane.getChildren().remove(rectangle10);
+
         selectedItem.getParent().getChildren().remove(selectedItem);
+
+        //deleteRect(rectangle10);
     }
 
     public void Additemcontainer() {
@@ -255,11 +266,15 @@ public class FarmController {
 
         TreeItem<FarmObject> object = new TreeItem<FarmObject>(farmObject);
         selectedItem.getChildren().add(object);
+
+        drawRect(rectangle3, entryLocationX, entryLocationY, entryWidth, entryHeight);
     }
 
     public void Deleteitemcontainer() {
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
+        //deleteRect(selectedItem.getValue().getRectangle());
         selectedItem.getParent().getChildren().remove(selectedItem);
+
     }
 
     public void Changestuff() {
@@ -294,8 +309,9 @@ public class FarmController {
     }
 
     public void initialize() {
-        Rectangle commandCenterRectangle = new Rectangle(commandCenter.getLayoutX(), commandCenter.getLayoutY(), commandCenter.getWidth(), commandCenter.getHeight());
-        anchorPane.getChildren().add(commandCenterRectangle);
+        Rectangle commandCenterRectangle = new Rectangle();
+        drawRect(commandCenterRectangle, 525,50,150,150);
+
         crudChoiceBox.setItems(FXCollections.observableArrayList("Add Item", "Delete Item", "Add Item Container", "Delete Item Container", "Change Value(s)"));
         TreeItem<FarmObject> rootItem = new TreeItem<>(new FarmObject("Root", 0, 0, 0,
                 0, 0, 0, commandCenterRectangle));
@@ -331,17 +347,29 @@ public class FarmController {
     @FXML
     public void drawRect(Rectangle r, double x, double y, double width, double height){
         //Rectangle2D r = new Rectangle2D(x, y, width, height);
-        //Rectangle r = new Rectangle(x, y, width, height);
-        r.setX(x);
-        r.setY(y);
-        r.setWidth(width);
-        r.setHeight(height);
-        r.setStrokeType(StrokeType.INSIDE);
-        r.setStroke(BLACK);
-        anchorPane.getChildren().add(r);
+        Color clear = new Color(0,0,0,0);
+        Rectangle rect = new Rectangle();
+        rect.setX(x);
+        rect.setY(y);
+        rect.setWidth(width);
+        rect.setHeight(height);
+        rect.setStrokeType(StrokeType.INSIDE);
+        rect.setStroke(BLACK);
+        rect.setFill(clear);
+        anchorPane.getChildren().add(rect);
     }
+/*
+    public void deleteRect(Rectangle rectangle){
+        double ex = rectangle.getX();
+        double why = rectangle.getY();
 
+        ex += 5000;
+        why += 5000;
+        rectangle.setLayoutX(ex);
+        rectangle.setLayoutY(why);
 
-        //A2.getChildren().add(r);
+        //rectangle.setWidth(0);
+    }
+ */
 
 }
