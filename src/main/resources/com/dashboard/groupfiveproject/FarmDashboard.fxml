@@ -25,9 +25,7 @@
     <Rectangle fx:id="cow" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="29.0" layoutX="434.0" layoutY="607.0" stroke="BLACK" strokeType="INSIDE" width="67.0" />
     <Rectangle fx:id="cropField" arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="394.0" layoutX="719.0" layoutY="396.0" stroke="BLACK" strokeType="INSIDE" width="196.0" />
     <ImageView layoutX="567.0" layoutY="79.0">
-      <image>
-        <Image url="@Desktop/drone.png" />
-      </image>
+        <Image url="@drone.png" />
     </ImageView>
       <AnchorPane layoutY="-2.0" prefHeight="800.0" prefWidth="308.0">
          <children>
@@ -59,7 +57,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Button fx:id="visitFarmItem" layoutX="101.0" layoutY="598.0" mnemonicParsing="false" text="Visit Farm Item" onMouseClicked = "#initializevisitFarmItemButton" />
+            <Button fx:id="visitFarmItem" layoutX="101.0" layoutY="598.0" mnemonicParsing="false" onMouseClicked="#initializevisitFarmItemButton" text="Visit Farm Item" />
             <Button fx:id="scanFarm" layoutX="113.0" layoutY="656.0" mnemonicParsing="false" onMouseClicked="#initializescanFarmButton" text="Scan Farm" />
             <Label layoutX="68.0" layoutY="623.0" text="**Be sure to Select a Farm Item to Visit**">
                <font>

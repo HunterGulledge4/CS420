@@ -1,5 +1,7 @@
 package com.dashboard.groupfiveproject;
 
+import javafx.event.ActionEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
 import javafx.animation.PauseTransition;
@@ -86,6 +88,12 @@ public class FarmController {
 
     @FXML
     private Button scanFarm;
+
+    @FXML
+    private TreeView<FarmObject> treeView;
+
+    @FXML
+    private Button visitFarmItem;
   
     public void initializescanFarmButton(){
         scanFarm.setOnAction(event -> setStartingPosition(-290,-110));
@@ -173,21 +181,20 @@ public class FarmController {
         BackToStartPosition.play();
     }
 
-    @FXML
-    private TreeView<FarmObject> treeView;
-
-    @FXML
-    private Button visitFarmItem;
-
-     public void initializevisitFarmItemButton(FarmObject object){
-        double x = (object.getLocationX());
-        double y = (object.getLocationY());
+    public void initializevisitFarmItemButton(){
+        //double x = (double) farmObject.getLocationX();
+        //double y = (double) farmObject.getLocationY();
+        TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
+        double x = selectedItem.getValue().getLocationX();
+        double y = selectedItem.getValue().getLocationY();
         visitFarmItem.setOnAction(event -> setStartingPositionOfFarmItem(x,y));
         double InitialSpotX = drone.getCenterX();
         double InitialSpotY = drone.getCenterY();
         System.out.println(InitialSpotX +" "+ "This is the x coordinate for the command center");
         System.out.println(InitialSpotY +" "+ "This is the Y coordinate for the command center");
     }
+
+
         public void setStartingPositionOfFarmItem(double targetX, double targetY) {
         double dx = targetX - drone.getCenterX();
         double dy = targetY - drone.getCenterY();
@@ -291,7 +298,7 @@ public class FarmController {
     }
 
     public void initialize() {
-        crudChoiceBox.setItems(FXCollections.observableArrayList("Add Item", "Delete Item", "Add Item Container", "Delete Item Container", "Change Value(s)");
+        crudChoiceBox.setItems(FXCollections.observableArrayList("Add Item", "Delete Item", "Add Item Container", "Delete Item Container", "Change Value(s)"));
         TreeItem<FarmObject> rootItem = new TreeItem<>(new FarmObject("Root", 0, 0, 0, 0, 0, 0));                                                                                                  
         treeView.setRoot(rootItem);
      
@@ -309,4 +316,6 @@ public class FarmController {
             }
         });
     }
+
+
 }
