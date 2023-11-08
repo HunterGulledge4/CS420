@@ -1,9 +1,11 @@
 package com.dashboard.groupfiveproject;
 
-import javafx.event.ActionEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
-
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
@@ -12,10 +14,10 @@ import javafx.scene.control.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-public class FarmController {
+import static javafx.scene.paint.Color.BLACK;
 
-    @FXML
-    private Rectangle barn;
+
+public class FarmController {
 
     @FXML
     private Button buttonSubmit;
@@ -25,15 +27,6 @@ public class FarmController {
 
     @FXML
     private ChoiceBox<String> crudChoiceBox;
-
-    @FXML
-    private ChoiceBox<String> commandChoiceBox;
-
-    @FXML
-    private Rectangle cow;
-
-    @FXML
-    private Rectangle cropField;
 
     @FXML
     private Circle drone;
@@ -81,16 +74,13 @@ public class FarmController {
     private Label labelWidth;
 
     @FXML
-    private Rectangle liveStockArea;
-
-    @FXML
-    private Rectangle milkStorage;
-
-    @FXML
     private Button scanFarm;
 
     @FXML
     private TreeView<FarmObject> treeView;
+
+    @FXML
+    private AnchorPane anchorPane;
 
     @FXML
     private Button visitFarmItem;
@@ -230,15 +220,17 @@ public class FarmController {
         int entryLength = Integer.parseInt(entryFieldLength.getText().isBlank() ? "0" : entryFieldLength.getText());
         int entryWidth = Integer.parseInt(entryFieldWidth.getText().isBlank() ? "0" : entryFieldWidth.getText());
         int entryHeight = Integer.parseInt(entryFieldHeight.getText().isBlank() ? "0" : entryFieldHeight.getText());
+        Rectangle rectangle2 = new Rectangle(entryLocationX, entryLocationY, entryWidth, entryHeight);
 
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
         FarmObject farmObject = new FarmObject(entryName, entryPrice, entryLocationX, entryLocationY, entryLength,
-                entryWidth, entryHeight);
+                entryWidth, entryHeight, rectangle2);
 
         TreeItem<FarmObject> object = new TreeItem<FarmObject>(farmObject);
         selectedItem.getChildren().add(object);
 
+        drawRect(rectangle2, entryLocationX, entryLocationY, entryWidth, entryHeight);
     }
 
     public void Deleteitem() {
@@ -254,11 +246,12 @@ public class FarmController {
         int entryLength = Integer.parseInt(entryFieldLength.getText().isBlank() ? "0" : entryFieldLength.getText());
         int entryWidth = Integer.parseInt(entryFieldWidth.getText().isBlank() ? "0" : entryFieldWidth.getText());
         int entryHeight = Integer.parseInt(entryFieldHeight.getText().isBlank() ? "0" : entryFieldHeight.getText());
+        Rectangle rectangle3 = new Rectangle(entryLocationX, entryLocationY, entryWidth, entryHeight);
 
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
         FarmObject farmObject = new FarmObject(entryName, entryPrice, entryLocationX, entryLocationY, entryLength,
-                entryWidth, entryHeight);
+                entryWidth, entryHeight, rectangle3);
 
         TreeItem<FarmObject> object = new TreeItem<FarmObject>(farmObject);
         selectedItem.getChildren().add(object);
@@ -281,6 +274,9 @@ public class FarmController {
         }
         if (!entryFieldLocationX.getText().isBlank()) {
             selectedItem.getValue().setLocationX(Integer.parseInt(entryFieldLocationX.getText()));
+            selectedItem.getValue().setRectangle(selectedItem.getValue().getRectangle(), Integer.parseInt(entryFieldLocationX.getText()),
+                    Integer.parseInt(entryFieldLocationY.getText()), Integer.parseInt(entryFieldWidth.getText()),
+                    Integer.parseInt(entryFieldHeight.getText()));
         }
         if (!entryFieldLocationY.getText().isBlank()) {
             selectedItem.getValue().setLocationY(Integer.parseInt(entryFieldLocationY.getText()));
@@ -298,8 +294,11 @@ public class FarmController {
     }
 
     public void initialize() {
+        Rectangle commandCenterRectangle = new Rectangle(commandCenter.getLayoutX(), commandCenter.getLayoutY(), commandCenter.getWidth(), commandCenter.getHeight());
+        anchorPane.getChildren().add(commandCenterRectangle);
         crudChoiceBox.setItems(FXCollections.observableArrayList("Add Item", "Delete Item", "Add Item Container", "Delete Item Container", "Change Value(s)"));
-        TreeItem<FarmObject> rootItem = new TreeItem<>(new FarmObject("Root", 0, 0, 0, 0, 0, 0));                                                                                                  
+        TreeItem<FarmObject> rootItem = new TreeItem<>(new FarmObject("Root", 0, 0, 0,
+                0, 0, 0, commandCenterRectangle));
         treeView.setRoot(rootItem);
      
         treeView.setCellFactory(param -> new TreeCell<FarmObject>() {
@@ -317,5 +316,32 @@ public class FarmController {
         });
     }
 
+    /*
+    public Rectangle2D drawRectangle() {
+        TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
+        double x = selectedItem.getValue().getLocationX();
+        double y = selectedItem.getValue().getLocationY();
+        double width = selectedItem.getValue().getWidth();
+        double height = selectedItem.getValue().getHeight();
+
+        return new Rectangle2D(x, y, width, height);
+    }
+     */
+
+    @FXML
+    public void drawRect(Rectangle r, double x, double y, double width, double height){
+        //Rectangle2D r = new Rectangle2D(x, y, width, height);
+        //Rectangle r = new Rectangle(x, y, width, height);
+        r.setX(x);
+        r.setY(y);
+        r.setWidth(width);
+        r.setHeight(height);
+        r.setStrokeType(StrokeType.INSIDE);
+        r.setStroke(BLACK);
+        anchorPane.getChildren().add(r);
+    }
+
+
+        //A2.getChildren().add(r);
 
 }

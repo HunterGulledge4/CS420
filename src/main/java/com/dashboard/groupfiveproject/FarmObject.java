@@ -1,10 +1,9 @@
 package com.dashboard.groupfiveproject;
 
-import java.util.ArrayList;
-import java.util.List;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.shape.Rectangle;
 
 public class FarmObject implements FarmInterface {
-    private List<FarmInterface> contents = new ArrayList<>();
     protected String name;
     protected float price;
     protected int locationX;
@@ -12,8 +11,9 @@ public class FarmObject implements FarmInterface {
     protected int length;
     protected int width;
     protected int height;
+    protected Rectangle rectangle;
     public FarmObject (String name, float price, int locationX, int locationY,
-                       int length, int width, int height) {
+                       int length, int width, int height, Rectangle rectangle) {
         this.name = name;
         this.price = price;
         this.locationX = locationX;
@@ -21,6 +21,7 @@ public class FarmObject implements FarmInterface {
         this.height = height;
         this.length = length;
         this.width = width;
+        this.rectangle = new Rectangle(locationX, locationY, width, height);
     }
 
 
@@ -80,23 +81,18 @@ public class FarmObject implements FarmInterface {
         this.height = height;
     }
 
-    /*
-    @Override
-    public List<FarmInterface> getContents() {
-        return contents;
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+    public void setRectangle(Rectangle rectangle, int locationX, int locationY, int width, int height) {
+        this.rectangle = rectangle;
+        this.locationX = locationX;
+        this.locationY = locationY;
+        this.width = width;
+        this.height = height;
     }
 
-    @Override
-    public void addItem(FarmInterface item) {
-        contents.add(item);
-    }
 
-    @Override
-    public void removeItem(FarmInterface item) {
-        contents.remove(item);
-    }
-
-     */
 
 
 }
