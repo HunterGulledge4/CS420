@@ -30,20 +30,8 @@
       <AnchorPane layoutY="-2.0" prefHeight="800.0" prefWidth="308.0">
          <children>
             <TreeView fx:id="treeView" layoutX="27.0" layoutY="24.0" prefHeight="130.0" prefWidth="243.0" />
-            <ChoiceBox fx:id="commandChoiceBox" layoutX="26.0" layoutY="169.0" prefHeight="25.0" prefWidth="123.0">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Change Name" />
-                        <String fx:value="Change Price" />
-                        <String fx:value="Change Location X" />
-                        <String fx:value="Change Location Y" />
-                        <String fx:value="Change Length" />
-                        <String fx:value="Change Width" />
-                        <String fx:value="Change Height" />
-                    </FXCollections>
-                </items>
-            </ChoiceBox>
-            <Button fx:id="buttonSubmit" layoutX="101.0" layoutY="493.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="94.0" text="Submit">
+            
+            <Button fx:id="buttonSubmit" onAction="#Executecommand" layoutX="101.0" layoutY="493.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="94.0" text="Submit" >
                <font>
                   <Font size="13.0" />
                </font>
@@ -81,6 +69,22 @@
                   <Font size="13.0" />
                </font>
             </Label>
+            <ChoiceBox fx:id="crudChoiceBox" layoutX="151.0" layoutY="169.0" prefHeight="25.0" prefWidth="123.0">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Add Item" />
+                        <String fx:value="Delete Item" />
+                        <String fx:value="Add Item Container" />
+                        <String fx:value="Change Name" />
+                        <String fx:value="Change Price" />
+                        <String fx:value="Change X Location" />
+                        <String fx:value="Change Y Location" />
+                        <String fx:value="Change Length" />
+                        <String fx:value="Change Width" />
+                        <String fx:value="Change Height" />
+                    </FXCollections>
+                </items>
+            </ChoiceBox>    
          </children>
       </AnchorPane>
       <Label layoutX="549.0" layoutY="22.0" text="Command Center">
