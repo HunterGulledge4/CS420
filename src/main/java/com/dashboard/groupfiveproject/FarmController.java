@@ -175,6 +175,30 @@ public class FarmController {
     @FXML
     private Button visitFarmItem;
 
+    public void initializevisitFarmItemButton(FarmObject object){
+        double x = (object.getLocationX());
+        double y = (object.getLocationY());
+        visitFarmItem.setOnAction(event -> setStartingPositionOfFarmItem(x,y));
+        double InitialSpotX = drone.getCenterX();
+        double InitialSpotY = drone.getCenterY();
+        System.out.println(InitialSpotX +" "+ "This is the x coordinate for the command center");
+        System.out.println(InitialSpotY +" "+ "This is the Y coordinate for the command center");
+    }
+        public void setStartingPositionOfFarmItem(double targetX, double targetY) {
+        double dx = targetX - drone.getCenterX();
+        double dy = targetY - drone.getCenterY();
+        System.out.println(dx + " " + "This is the starting x coordinate");
+        System.out.println(dy + " " + "This is the starting y coordinate");
+        Duration speed = Duration.seconds(1);
+        TranslateTransition startPosition = new TranslateTransition(speed, drone);
+        startPosition.setToX(dx);
+        startPosition.setToY(dy);
+        startPosition.play();
+    }
+
+
+
+
     public void initialize() {
         commandChoiceBox.setItems(FXCollections.observableArrayList("Change Name", "Change Price",
                 "Change Location X", "Change Location Y", "Change Length", "Change Width", "Change Height"));
