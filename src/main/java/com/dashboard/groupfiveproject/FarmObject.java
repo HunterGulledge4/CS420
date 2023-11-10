@@ -1,6 +1,6 @@
 package com.dashboard.groupfiveproject;
 
-import javafx.geometry.Rectangle2D;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 public class FarmObject implements FarmInterface {
@@ -11,9 +11,12 @@ public class FarmObject implements FarmInterface {
     protected int length;
     protected int width;
     protected int height;
+    protected String shape;
     protected Rectangle rectangle;
-    public FarmObject (String name, float price, int locationX, int locationY,
-                       int length, int width, int height, Rectangle rectangle) {
+    protected Circle circle;
+
+    public FarmObject(String name, float price, int locationX, int locationY,
+            int length, int width, int height, String shape) {
         this.name = name;
         this.price = price;
         this.locationX = locationX;
@@ -21,14 +24,16 @@ public class FarmObject implements FarmInterface {
         this.height = height;
         this.length = length;
         this.width = width;
+        this.shape = shape;
         this.rectangle = new Rectangle(locationX, locationY, width, height);
+        this.circle = new Circle(locationX, locationY, height);
     }
-
 
     @Override
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -37,6 +42,7 @@ public class FarmObject implements FarmInterface {
     public Float getPrice() {
         return price;
     }
+
     public void setPrice(float price) {
         this.price = price;
     }
@@ -45,6 +51,7 @@ public class FarmObject implements FarmInterface {
     public Integer getLocationX() {
         return locationX;
     }
+
     public void setLocationX(int locationX) {
         this.locationX = locationX;
     }
@@ -53,6 +60,7 @@ public class FarmObject implements FarmInterface {
     public Integer getLocationY() {
         return locationY;
     }
+
     public void setLocationY(int locationY) {
         this.locationY = locationY;
     }
@@ -61,6 +69,7 @@ public class FarmObject implements FarmInterface {
     public Integer getLength() {
         return length;
     }
+
     public void setLength(int length) {
         this.length = length;
     }
@@ -69,6 +78,7 @@ public class FarmObject implements FarmInterface {
     public Integer getWidth() {
         return width;
     }
+
     public void setWidth(int width) {
         this.width = width;
     }
@@ -77,13 +87,19 @@ public class FarmObject implements FarmInterface {
     public Integer getHeight() {
         return height;
     }
+
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public String getShape() {
+        return shape;
     }
 
     public Rectangle getRectangle() {
         return rectangle;
     }
+
     public void setRectangle(Rectangle rectangle, int locationX, int locationY, int width, int height) {
         this.rectangle = rectangle;
         this.locationX = locationX;
@@ -92,7 +108,15 @@ public class FarmObject implements FarmInterface {
         this.height = height;
     }
 
+    public Circle getCircle() {
+        return circle;
+    }
 
-
+    public void setCircle(Circle circle, int locationX, int locationY, int height) {
+        this.circle = circle;
+        this.locationX = locationX;
+        this.locationY = locationY;
+        this.height = height;
+    }
 
 }
