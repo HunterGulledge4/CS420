@@ -168,7 +168,8 @@ public class FarmController {
 
     public void StopScan() {
         Duration speed = Duration.seconds(1);
-        TranslateTransition BackToStartPosition = new TranslateTransition(speed, drone);
+        TranslateTransition BackToStartPosition = new TranslateTransition(speed,
+                drone);
         BackToStartPosition.setToX(0);
         BackToStartPosition.setToY(0);
         BackToStartPosition.play();
@@ -200,7 +201,7 @@ public class FarmController {
     }
 
     public void Executecommand() {
-        if (crudChoiceBox.getValue().equals("Add Item")) {
+        if (crudChoiceBox.getValue() == null) {
             Additem();
         } else if (crudChoiceBox.getValue().equals("Delete Item")) {
             Deleteitem();
@@ -208,33 +209,61 @@ public class FarmController {
             Additemcontainer();
         } else if (crudChoiceBox.getValue().equals("Delete Item Container")) {
             Deleteitemcontainer();
-        } else {
+        } else if (crudChoiceBox.getValue().equals("Change Value(s)")) {
             Changestuff();
+        } else if (crudChoiceBox.getValue().equals("Add Item")) {
+            Additem();
         }
 
     }
 
     public void Additem() {
         String entryName = entryFieldName.getText().isBlank() ? "Left Blank" : entryFieldName.getText();
-        float entryPrice = Float.parseFloat(entryFieldPrice.getText().isBlank() ? "0" : entryFieldPrice.getText());
+        float entryPrice = Float.parseFloat(entryFieldPrice.getText().isBlank() ? "0"
+                : entryFieldPrice.getText());
         int entryLocationX = Integer
                 .parseInt(entryFieldLocationX.getText().isBlank() ? "0" : entryFieldLocationX.getText());
         int entryLocationY = Integer
                 .parseInt(entryFieldLocationY.getText().isBlank() ? "0" : entryFieldLocationY.getText());
-        int entryLength = Integer.parseInt(entryFieldLength.getText().isBlank() ? "0" : entryFieldLength.getText());
+        int entryLength = Integer.parseInt(entryFieldLength.getText().isBlank() ? "0"
+                : entryFieldLength.getText());
         int entryWidth = Integer.parseInt(entryFieldWidth.getText().isBlank() ? "0" : entryFieldWidth.getText());
-        int entryHeight = Integer.parseInt(entryFieldHeight.getText().isBlank() ? "0" : entryFieldHeight.getText());
+        int entryHeight = Integer.parseInt(entryFieldHeight.getText().isBlank() ? "0"
+                : entryFieldHeight.getText());
         String entryShape = entryFieldShape.getText().isBlank() ? "Rectangle" : entryFieldShape.getText();
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
-        FarmObject farmObject = new FarmObject(entryName, entryPrice, entryLocationX, entryLocationY, entryLength,
+        if (entryLocationX < 300 || entryLocationX > 1280) {
+            entryLocationX = 300;
+        }
+        if (entryLocationY < 0 || entryLocationY > 650) {
+            entryLocationY = 0;
+        }
+        if (entryLength < 0 || entryLength > 325) {
+            entryLength = 50;
+        }
+        if (entryHeight < 0 || entryHeight > 650) {
+            entryHeight = 50;
+        }
+        if (entryWidth < 0 || entryWidth > 980) {
+            entryWidth = 50;
+        }
+
+        if (selectedItem == null) {
+            selectedItem = treeView.getRoot();
+            treeView.getSelectionModel().select(selectedItem);
+        }
+
+        FarmObject farmObject = new FarmObject(entryName, entryPrice, entryLocationX,
+                entryLocationY, entryLength,
                 entryWidth, entryHeight, entryShape);
 
         TreeItem<FarmObject> object = new TreeItem<FarmObject>(farmObject);
         selectedItem.getChildren().add(object);
 
         if (entryShape.toLowerCase().equalsIgnoreCase("rectangle")) {
-            Rectangle rectangle = new Rectangle(entryLocationX, entryLocationY, entryWidth, entryHeight);
+            Rectangle rectangle = new Rectangle(entryLocationX, entryLocationY,
+                    entryWidth, entryHeight);
             anchorPane.getChildren().add(rectangle);
             rectangle.setStroke(Color.BLACK);
             rectangle.setFill(Color.TRANSPARENT);
@@ -243,7 +272,7 @@ public class FarmController {
             text.setLayoutY(entryLocationY + 20);
             anchorPane.getChildren().add(text);
         } else if (entryShape.toLowerCase().equalsIgnoreCase("circle")) {
-            Circle circle = new Circle(entryLocationX, entryLocationY, entryHeight);
+            Circle circle = new Circle(entryLocationX + entryLength, entryLocationY + entryLength, entryLength);
             anchorPane.getChildren().add(circle);
             circle.setStroke(Color.BLACK);
             circle.setFill(Color.TRANSPARENT);
@@ -252,7 +281,8 @@ public class FarmController {
             text.setLayoutY(entryLocationY + 20);
             anchorPane.getChildren().add(text);
         } else {
-            Rectangle rectangle = new Rectangle(entryLocationX, entryLocationY, entryWidth, entryHeight);
+            Rectangle rectangle = new Rectangle(entryLocationX, entryLocationY,
+                    entryWidth, entryHeight);
             anchorPane.getChildren().add(rectangle);
             rectangle.setStroke(Color.BLACK);
             rectangle.setFill(Color.TRANSPARENT);
@@ -309,67 +339,172 @@ public class FarmController {
             }
             anchorPane.getChildren().removeAll(nodesToRemove);
             traverseTree(rootItem);
+        } else {
+            treeView.getRoot().getChildren().clear();
+            for (Node node : anchorPane.getChildren()) {
+                if (node instanceof Rectangle || node instanceof Circle || node instanceof Text) {
+                    nodesToRemove.add(node);
+                }
+            }
+            anchorPane.getChildren().removeAll(nodesToRemove);
         }
 
     }
 
     public void Additemcontainer() {
         String entryName = entryFieldName.getText().isBlank() ? "Left Blank" : entryFieldName.getText();
-        float entryPrice = Float.parseFloat(entryFieldPrice.getText().isBlank() ? "0" : entryFieldPrice.getText());
+        float entryPrice = Float.parseFloat(entryFieldPrice.getText().isBlank() ? "0"
+                : entryFieldPrice.getText());
         int entryLocationX = Integer
                 .parseInt(entryFieldLocationX.getText().isBlank() ? "0" : entryFieldLocationX.getText());
         int entryLocationY = Integer
                 .parseInt(entryFieldLocationY.getText().isBlank() ? "0" : entryFieldLocationY.getText());
-        int entryLength = Integer.parseInt(entryFieldLength.getText().isBlank() ? "0" : entryFieldLength.getText());
+        int entryLength = Integer.parseInt(entryFieldLength.getText().isBlank() ? "0"
+                : entryFieldLength.getText());
         int entryWidth = Integer.parseInt(entryFieldWidth.getText().isBlank() ? "0" : entryFieldWidth.getText());
-        int entryHeight = Integer.parseInt(entryFieldHeight.getText().isBlank() ? "0" : entryFieldHeight.getText());
-        Rectangle rectangle3 = new Rectangle(entryLocationX, entryLocationY, entryWidth, entryHeight);
-
+        int entryHeight = Integer.parseInt(entryFieldHeight.getText().isBlank() ? "0"
+                : entryFieldHeight.getText());
+        String entryShape = entryFieldShape.getText().isBlank() ? "Rectangle" : entryFieldShape.getText();
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
-        FarmObject farmObject = new FarmObject(entryName, entryPrice, entryLocationX, entryLocationY, entryLength,
-                entryWidth, entryHeight, "Rectangle");
+        if (entryLocationX < 300 || entryLocationX > 1280) {
+            entryLocationX = 300;
+        }
+        if (entryLocationY < 0 || entryLocationY > 650) {
+            entryLocationY = 0;
+        }
+        if (entryLength < 0 || entryLength > 325) {
+            entryLength = 50;
+        }
+        if (entryHeight < 0 || entryHeight > 650) {
+            entryHeight = 50;
+        }
+        if (entryWidth < 0 || entryWidth > 980) {
+            entryWidth = 50;
+        }
+
+        if (selectedItem == null) {
+            selectedItem = treeView.getRoot();
+            treeView.getSelectionModel().select(selectedItem);
+        }
+
+        FarmObject farmObject = new FarmObject(entryName, entryPrice, entryLocationX,
+                entryLocationY, entryLength,
+                entryWidth, entryHeight, entryShape);
 
         TreeItem<FarmObject> object = new TreeItem<FarmObject>(farmObject);
         selectedItem.getChildren().add(object);
 
-        drawRect(rectangle3, entryLocationX, entryLocationY, entryWidth, entryHeight);
+        if (entryShape.toLowerCase().equalsIgnoreCase("rectangle")) {
+            Rectangle rectangle = new Rectangle(entryLocationX, entryLocationY,
+                    entryWidth, entryHeight);
+            anchorPane.getChildren().add(rectangle);
+            rectangle.setStroke(Color.BLACK);
+            rectangle.setFill(Color.TRANSPARENT);
+            Text text = new Text(entryName);
+            text.setLayoutX(entryLocationX);
+            text.setLayoutY(entryLocationY + 20);
+            anchorPane.getChildren().add(text);
+        } else if (entryShape.toLowerCase().equalsIgnoreCase("circle")) {
+            Circle circle = new Circle(entryLocationX, entryLocationY, entryLength);
+            anchorPane.getChildren().add(circle);
+            circle.setStroke(Color.BLACK);
+            circle.setFill(Color.TRANSPARENT);
+            Text text = new Text(entryName);
+            text.setLayoutX(entryLocationX);
+            text.setLayoutY(entryLocationY + 20);
+            anchorPane.getChildren().add(text);
+        } else {
+            Rectangle rectangle = new Rectangle(entryLocationX, entryLocationY,
+                    entryWidth, entryHeight);
+            anchorPane.getChildren().add(rectangle);
+            rectangle.setStroke(Color.BLACK);
+            rectangle.setFill(Color.TRANSPARENT);
+            Text text = new Text(entryName);
+            text.setLayoutX(entryLocationX);
+            text.setLayoutY(entryLocationY + 20);
+            anchorPane.getChildren().add(text);
+        }
+
     }
 
     public void Deleteitemcontainer() {
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
-        selectedItem.getParent().getChildren().remove(selectedItem);
+
+        List<Node> nodesToRemove = new ArrayList<>();
+
+        if (!selectedItem.equals(rootItem) && selectedItem != null) {
+            selectedItem.getParent().getChildren().remove(selectedItem);
+
+            for (Node node : anchorPane.getChildren()) {
+                if (node instanceof Rectangle || node instanceof Circle || node instanceof Text) {
+                    nodesToRemove.add(node);
+                }
+            }
+            anchorPane.getChildren().removeAll(nodesToRemove);
+            traverseTree(rootItem);
+        } else {
+            treeView.getRoot().getChildren().clear();
+            for (Node node : anchorPane.getChildren()) {
+                if (node instanceof Rectangle || node instanceof Circle || node instanceof Text) {
+                    nodesToRemove.add(node);
+                }
+            }
+            anchorPane.getChildren().removeAll(nodesToRemove);
+        }
 
     }
 
     public void Changestuff() {
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
-        if (!entryFieldName.getText().isBlank()) {
-            selectedItem.getValue().setName(entryFieldName.getText());
-            System.out.println(!entryFieldName.getText().isBlank());
-        }
-        if (!entryFieldPrice.getText().isBlank()) {
-            selectedItem.getValue().setPrice(Float.parseFloat(entryFieldPrice.getText()));
-        }
-        if (!entryFieldLocationX.getText().isBlank()) {
-            selectedItem.getValue().setLocationX(Integer.parseInt(entryFieldLocationX.getText()));
-            selectedItem.getValue().setRectangle(selectedItem.getValue().getRectangle(),
-                    Integer.parseInt(entryFieldLocationX.getText()),
-                    Integer.parseInt(entryFieldLocationY.getText()), Integer.parseInt(entryFieldWidth.getText()),
-                    Integer.parseInt(entryFieldHeight.getText()));
-        }
-        if (!entryFieldLocationY.getText().isBlank()) {
-            selectedItem.getValue().setLocationY(Integer.parseInt(entryFieldLocationY.getText()));
-        }
-        if (!entryFieldLength.getText().isBlank()) {
-            selectedItem.getValue().setLength(Integer.parseInt(entryFieldLength.getText()));
-        }
-        if (!entryFieldWidth.getText().isBlank()) {
-            selectedItem.getValue().setWidth(Integer.parseInt(entryFieldWidth.getText()));
-        }
-        if (!entryFieldHeight.getText().isBlank()) {
-            selectedItem.getValue().setHeight(Integer.parseInt(entryFieldHeight.getText()));
+        if (!selectedItem.equals(rootItem) && selectedItem != null) {
+            if (!entryFieldName.getText().isBlank()) {
+                selectedItem.getValue().setName(entryFieldName.getText());
+                System.out.println(entryFieldName.getText());
+                System.out.println(selectedItem.getValue().getName());
+            }
+            if (!entryFieldPrice.getText().isBlank()) {
+                selectedItem.getValue().setPrice(Float.parseFloat(entryFieldPrice.getText()));
+            }
+            if (!entryFieldLocationX.getText().isBlank()) {
+                selectedItem.getValue().setLocationX(Integer.parseInt(entryFieldLocationX.getText()));
+            }
+            if (!entryFieldLocationY.getText().isBlank()) {
+                selectedItem.getValue().setLocationY(Integer.parseInt(entryFieldLocationY.getText()));
+            }
+            if (!entryFieldLength.getText().isBlank()) {
+                selectedItem.getValue().setLength(Integer.parseInt(entryFieldLength.getText()));
+            }
+            if (!entryFieldWidth.getText().isBlank()) {
+                selectedItem.getValue().setWidth(Integer.parseInt(entryFieldWidth.getText()));
+            }
+            if (!entryFieldHeight.getText().isBlank()) {
+                selectedItem.getValue().setHeight(Integer.parseInt(entryFieldHeight.getText()));
+            }
+
+            List<Node> nodesToRemove = new ArrayList<>();
+
+            for (Node node : anchorPane.getChildren()) {
+                if (node instanceof Rectangle || node instanceof Circle || node instanceof Text) {
+                    nodesToRemove.add(node);
+                }
+            }
+            anchorPane.getChildren().removeAll(nodesToRemove);
+            traverseTree(rootItem);
+            treeView.setCellFactory(param -> new TreeCell<FarmObject>() {
+
+                @Override
+                protected void updateItem(FarmObject item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.getName());
+                    }
+                }
+            });
         }
 
     }
@@ -377,8 +512,6 @@ public class FarmController {
     TreeItem<FarmObject> rootItem;
 
     public void initialize() {
-        Rectangle commandCenterRectangle = new Rectangle();
-        drawRect(commandCenterRectangle, 525, 50, 150, 150);
 
         crudChoiceBox.setItems(FXCollections.observableArrayList("Add Item", "Delete Item", "Add Item Container",
                 "Delete Item Container", "Change Value(s)"));
@@ -409,13 +542,13 @@ public class FarmController {
      * double y = selectedItem.getValue().getLocationY();
      * double width = selectedItem.getValue().getWidth();
      * double height = selectedItem.getValue().getHeight();
-     * 
+     *
      * return new Rectangle2D(x, y, width, height);
      * }
      */
 
     @FXML
-    public void drawRect(Rectangle r, double x, double y, double width, double height) {
+    public void drawRect(double x, double y, double width, double height) {
         // Rectangle2D r = new Rectangle2D(x, y, width, height);
         Color clear = new Color(0, 0, 0, 0);
         Rectangle rect = new Rectangle();
@@ -432,12 +565,12 @@ public class FarmController {
      * public void deleteRect(Rectangle rectangle){
      * double ex = rectangle.getX();
      * double why = rectangle.getY();
-     * 
+     *
      * ex += 5000;
      * why += 5000;
      * rectangle.setLayoutX(ex);
      * rectangle.setLayoutY(why);
-     * 
+     *
      * //rectangle.setWidth(0);
      * }
      */

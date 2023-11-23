@@ -1,17 +1,28 @@
 package com.dashboard.groupfiveproject;
 
-import javafx.geometry.Rectangle2D;
-import javafx.scene.shape.Rectangle;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public class ItemContainer extends FarmObject {
-    private ArrayList<FarmObject> children;
+
+    private List<FarmObject> farmObjects;
 
     public ItemContainer(String name, float price, int locationX, int locationY,
-                         int length, int width, int height, Rectangle rectangle) {
+            int length, int width, int height, String rectangle) {
         super(name, price, locationX, locationY, length, width, height, rectangle);
-        this.children = new ArrayList<>();
+        farmObjects = new ArrayList<>();
+    }
+
+    public void addFarmObject(FarmObject farmObject) {
+        farmObjects.add(farmObject);
+    }
+
+    public void removeFarmObject(FarmObject farmObject) {
+        farmObjects.remove(farmObject);
+    }
+
+    public List<FarmObject> getFarmObjects() {
+        return farmObjects;
     }
 
 }

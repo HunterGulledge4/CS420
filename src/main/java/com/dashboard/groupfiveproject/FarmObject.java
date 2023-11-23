@@ -1,8 +1,5 @@
 package com.dashboard.groupfiveproject;
 
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-
 public class FarmObject implements FarmInterface {
     protected String name;
     protected float price;
@@ -12,8 +9,6 @@ public class FarmObject implements FarmInterface {
     protected int width;
     protected int height;
     protected String shape;
-    protected Rectangle rectangle;
-    protected Circle circle;
 
     public FarmObject(String name, float price, int locationX, int locationY,
             int length, int width, int height, String shape) {
@@ -25,8 +20,6 @@ public class FarmObject implements FarmInterface {
         this.length = length;
         this.width = width;
         this.shape = shape;
-        this.rectangle = new Rectangle(locationX, locationY, width, height);
-        this.circle = new Circle(locationX, locationY, height);
     }
 
     @Override
@@ -94,29 +87,6 @@ public class FarmObject implements FarmInterface {
 
     public String getShape() {
         return shape;
-    }
-
-    public Rectangle getRectangle() {
-        return rectangle;
-    }
-
-    public void setRectangle(Rectangle rectangle, int locationX, int locationY, int width, int height) {
-        this.rectangle = rectangle;
-        this.locationX = locationX;
-        this.locationY = locationY;
-        this.width = width;
-        this.height = height;
-    }
-
-    public Circle getCircle() {
-        return circle;
-    }
-
-    public void setCircle(Circle circle, int locationX, int locationY, int height) {
-        this.circle = circle;
-        this.locationX = locationX;
-        this.locationY = locationY;
-        this.height = height;
     }
 
 }
