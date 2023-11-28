@@ -1,0 +1,18 @@
+package com.dashboard.groupfiveproject;
+
+public class Drone Manager {
+
+  public static DroneManager instance;
+
+  private DroneManager() {
+  }
+
+  public static synchronized DroneManager getInstance() {
+    if (instance == null) {
+      instance = new DroneManager();
+    }
+    return instance;
+  }
+
+}
+// This code should go in the farm controller class
