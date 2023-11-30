@@ -4,9 +4,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 
 import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -91,30 +93,62 @@ public class FarmController {
     @FXML
     private Button visitFarmItem;
 
-    public void initializescanFarmButton() {
-        scanFarm.setOnAction(event -> setStartingPosition(-290, -110));
-        double InitialSpotX = drone.getCenterX();
-        double InitialSpotY = drone.getCenterY();
-        System.out.println(InitialSpotX + " " + "This is the x coordinate for the command center");
-        System.out.println(InitialSpotY + " " + "This is the Y coordinate for the command center");
-        // Starting point is top left at x = -290 y = -110
-        // Field has a total length of = 965
-        // Field has a total width of = 670
+    // public void startScan() {
+    // // scanFarm.setOnAction(event -> setStartingPosition(-290, -110));
+    // // double InitialSpotX = drone.getCenterX();
+    // // double InitialSpotY = drone.getCenterY();
+    // System.out.println("" + " " + "This is the x coordinate for the command
+    // center");
+    // System.out.println("" + " " + "This is the Y coordinate for the command
+    // center");
+    // // Starting point is top left at x = -290 y = -110
+    // // Field has a total length of = 965
+    // // Field has a total width of = 670
+    // }
+
+    public void startScan() {
+        Circle circleDrone = new Circle(450, 100, 7);
+        circleDrone.setStroke(Color.BLUE);
+        circleDrone.setFill(Color.BLUE);
+        anchorPane.getChildren().add(circleDrone);
+        SequentialTransition sequentialTransition = new SequentialTransition();
+        TranslateTransition translateInit = new TranslateTransition(Duration.seconds(1), circleDrone);
+        translateInit.setByX(-100);
+        translateInit.setByY(-50);
+        sequentialTransition.getChildren().add(translateInit);
+        for (int i = 1; i <= 8; i++) {
+            TranslateTransition translateRight = new TranslateTransition(Duration.seconds(0.3), circleDrone);
+            translateRight.setByX(900);
+            sequentialTransition.getChildren().add(translateRight);
+            TranslateTransition translateDown = new TranslateTransition(Duration.seconds(0.3), circleDrone);
+            translateDown.setByY(75);
+            sequentialTransition.getChildren().add(translateDown);
+            TranslateTransition translateLeft = new TranslateTransition(Duration.seconds(0.3), circleDrone);
+            translateLeft.setByX(-900);
+            sequentialTransition.getChildren().add(translateLeft);
+        }
+        TranslateTransition translateNormalize = new TranslateTransition(Duration.seconds(1), circleDrone);
+        translateNormalize.setByX(100);
+        translateNormalize.setByY(-(8 * 75) + 50);
+        sequentialTransition.getChildren().add(translateNormalize);
+
+        sequentialTransition.play();
     }
 
     public void setStartingPosition(double targetX, double targetY) {
         double dx = targetX - drone.getCenterX();
         double dy = targetY - drone.getCenterY();
+
         System.out.println(dx + " " + "This is the starting x coordinate");
         System.out.println(dy + " " + "This is the starting y coordinate");
-        Duration speed = Duration.seconds(1);
-        TranslateTransition startPosition = new TranslateTransition(speed, drone);
-        startPosition.setToX(dx);
-        startPosition.setToY(dy);
-        startPosition.setOnFinished(event -> {
-            scan(dx, dy);
-        });
-        startPosition.play();
+        // Duration speed = Duration.seconds(1);
+        // TranslateTransition startPosition = new TranslateTransition(speed, drone);
+        // startPosition.setToX(dx);
+        // startPosition.setToY(dy);
+        // startPosition.setOnFinished(event -> {
+        // scan(dx, dy);
+        // });
+        // startPosition.play();
     }
 
     public void scan(double dx, double dy) {
@@ -125,7 +159,7 @@ public class FarmController {
         } else if (dx == 310.0) {
             GoRight();
         }
-        if (dy == 675.0) {
+        if (dy >= 675.0) {
             StopScan();
         }
     }
@@ -169,36 +203,38 @@ public class FarmController {
 
     public void StopScan() {
         Duration speed = Duration.seconds(1);
-        TranslateTransition BackToStartPosition = new TranslateTransition(speed,
-                drone);
+        TranslateTransition BackToStartPosition = new TranslateTransition(speed, drone);
         BackToStartPosition.setToX(0);
         BackToStartPosition.setToY(0);
         BackToStartPosition.play();
     }
 
     public void initializevisitFarmItemButton() {
-        // double x = (double) farmObject.getLocationX();
-        // double y = (double) farmObject.getLocationY();
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
-        double x = selectedItem.getValue().getLocationX();
-        double y = selectedItem.getValue().getLocationY();
-        visitFarmItem.setOnAction(event -> setStartingPositionOfFarmItem(x, y));
-        double InitialSpotX = drone.getCenterX();
-        double InitialSpotY = drone.getCenterY();
-        System.out.println(InitialSpotX + " " + "This is the x coordinate for the command center");
-        System.out.println(InitialSpotY + " " + "This is the Y coordinate for the command center");
-    }
+        int x = selectedItem.getValue().getLocationX();
+        int y = selectedItem.getValue().getLocationY();
+        int height = selectedItem.getValue().getShape().equalsIgnoreCase("circle")
+                ? selectedItem.getValue().getLength() * 2
+                : selectedItem.getValue().getHeight();
+        int width = selectedItem.getValue().getShape().equalsIgnoreCase("circle")
+                ? selectedItem.getValue().getLength() * 2
+                : selectedItem.getValue().getWidth();
+        Circle circleDrone = new Circle(450, 100, 7);
+        circleDrone.setStroke(Color.BLUE);
+        circleDrone.setFill(Color.BLUE);
+        anchorPane.getChildren().add(circleDrone);
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(2), circleDrone);
+        TranslateTransition transitionBack = new TranslateTransition(Duration.seconds(2), circleDrone);
+        transitionBack.setByX(-((x + width / 2) - 450));
+        transitionBack.setByY(-((y + height / 2) - 100));
+        transition.setToX((x + width / 2) - 450);
+        transition.setToY((y + height / 2) - 100);
 
-    public void setStartingPositionOfFarmItem(double targetX, double targetY) {
-        double dx = targetX - drone.getCenterX();
-        double dy = targetY - drone.getCenterY();
-        System.out.println(dx + " " + "This is the starting x coordinate");
-        System.out.println(dy + " " + "This is the starting y coordinate");
-        Duration speed = Duration.seconds(1);
-        TranslateTransition startPosition = new TranslateTransition(speed, drone);
-        startPosition.setToX(dx);
-        startPosition.setToY(dy);
-        startPosition.play();
+        transition.play();
+        transition.setOnFinished(event -> transitionBack.play());
+
+        // double InitialSpotX = drone.getCenterX();
+        // double InitialSpotY = drone.getCenterY();
     }
 
     public void Executecommand() {
@@ -292,11 +328,9 @@ public class FarmController {
             text.setLayoutY(entryLocationY + 20);
             anchorPane.getChildren().add(text);
         }
-
     }
 
     private void traverseTree(TreeItem<FarmObject> item) {
-
         if (item != null) {
             if (!item.getValue().getName().equalsIgnoreCase("Root")) {
                 if (item.getValue().getShape().equalsIgnoreCase("rectangle")) {
@@ -312,6 +346,9 @@ public class FarmController {
                             item.getValue().getLocationY(), radius);
                     circle.setStroke(Color.BLACK);
                     circle.setFill(Color.TRANSPARENT);
+                    if (item.getValue().getName().equalsIgnoreCase("drone")) {
+                        circle.setFill(BLUE);
+                    }
                     anchorPane.getChildren().add(circle);
                 }
                 Text text = new Text(item.getValue().getName());
@@ -330,7 +367,9 @@ public class FarmController {
 
         List<Node> nodesToRemove = new ArrayList<>();
 
-        if (!selectedItem.equals(rootItem) && selectedItem != null) {
+        if (!selectedItem.equals(rootItem) && selectedItem != null
+                && !selectedItem.getValue().getName().equalsIgnoreCase("Command Center")
+                && !selectedItem.getValue().getName().equalsIgnoreCase("Drone")) {
             selectedItem.getParent().getChildren().remove(selectedItem);
 
             for (Node node : anchorPane.getChildren()) {
@@ -340,16 +379,7 @@ public class FarmController {
             }
             anchorPane.getChildren().removeAll(nodesToRemove);
             traverseTree(rootItem);
-        } else {
-            treeView.getRoot().getChildren().clear();
-            for (Node node : anchorPane.getChildren()) {
-                if (node instanceof Rectangle || node instanceof Circle || node instanceof Text) {
-                    nodesToRemove.add(node);
-                }
-            }
-            anchorPane.getChildren().removeAll(nodesToRemove);
         }
-
     }
 
     public void Additemcontainer() {
@@ -365,7 +395,8 @@ public class FarmController {
         int entryWidth = Integer.parseInt(entryFieldWidth.getText().isBlank() ? "0" : entryFieldWidth.getText());
         int entryHeight = Integer.parseInt(entryFieldHeight.getText().isBlank() ? "0"
                 : entryFieldHeight.getText());
-        String entryShape = entryFieldShape.getText().isBlank() ? "Rectangle" : entryFieldShape.getText();
+        String entryShape = entryFieldShape.getText().equalsIgnoreCase("circle") ? "Circle"
+                : "Rectangle";
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
         if (entryLocationX < 300 || entryLocationX > 1280) {
@@ -412,7 +443,7 @@ public class FarmController {
             circle.setStroke(Color.BLACK);
             circle.setFill(Color.TRANSPARENT);
             Text text = new Text(entryName);
-            text.setLayoutX(entryLocationX);
+            text.setLayoutX(entryLocationX + (entryHeight / 2));
             text.setLayoutY(entryLocationY + 20);
             anchorPane.getChildren().add(text);
         } else {
@@ -433,7 +464,9 @@ public class FarmController {
 
         List<Node> nodesToRemove = new ArrayList<>();
 
-        if (!selectedItem.equals(rootItem) && selectedItem != null) {
+        if (!selectedItem.equals(rootItem) && selectedItem != null
+                && !selectedItem.getValue().getName().equalsIgnoreCase("Command Center")
+                && !selectedItem.getValue().getName().equalsIgnoreCase("Command Center")) {
             selectedItem.getParent().getChildren().remove(selectedItem);
 
             for (Node node : anchorPane.getChildren()) {
@@ -443,16 +476,7 @@ public class FarmController {
             }
             anchorPane.getChildren().removeAll(nodesToRemove);
             traverseTree(rootItem);
-        } else {
-            treeView.getRoot().getChildren().clear();
-            for (Node node : anchorPane.getChildren()) {
-                if (node instanceof Rectangle || node instanceof Circle || node instanceof Text) {
-                    nodesToRemove.add(node);
-                }
-            }
-            anchorPane.getChildren().removeAll(nodesToRemove);
         }
-
     }
 
     public void Changestuff() {
@@ -521,9 +545,9 @@ public class FarmController {
                 50, 100,
                 100, 100, "rectangle");
 
-        FarmObject droneThing = new FarmObject("Drone", 10000, 435,
-                100, 100,
-                100, 100, "rectangle");
+        FarmObject droneThing = new FarmObject("Drone", 10000, 450,
+                100, 0,
+                0, 7, "circle");
 
         TreeItem<FarmObject> commandCenter = new TreeItem<FarmObject>(cc);
         TreeItem<FarmObject> drone = new TreeItem<FarmObject>(droneThing);
@@ -536,19 +560,14 @@ public class FarmController {
         rectangle.setStroke(Color.BLACK);
         rectangle.setFill(Color.TRANSPARENT);
         Text text = new Text("Command Center");
-        text.setLayoutX(400);
+        text.setLayoutX(400 + 5);
         text.setLayoutY(50 + 20);
         anchorPane.getChildren().add(text);
 
-        Rectangle rectangle2 = new Rectangle(435, 100,
-                25, 25);
-        anchorPane.getChildren().add(rectangle2);
-        rectangle2.setStroke(Color.BLACK);
-        rectangle2.setFill(Color.TRANSPARENT);
-        Text text2 = new Text("Drone");
-        text2.setLayoutX(435);
-        text2.setLayoutY(100 + 20);
-        anchorPane.getChildren().add(text2);
+        Circle circleDrone = new Circle(450, 100, 7);
+        circleDrone.setStroke(Color.BLUE);
+        circleDrone.setFill(Color.BLUE);
+        anchorPane.getChildren().add(circleDrone);
 
         treeView.setCellFactory(param -> new TreeCell<FarmObject>() {
 
