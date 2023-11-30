@@ -1,7 +1,5 @@
 package com.dashboard.groupfiveproject;
 
-import java.util.List;
-
 public interface FarmInterface {
     String getName();
     Float getPrice();

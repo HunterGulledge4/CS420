@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
@@ -425,7 +426,6 @@ public class FarmController {
             text.setLayoutY(entryLocationY + 20);
             anchorPane.getChildren().add(text);
         }
-
     }
 
     public void Deleteitemcontainer() {
@@ -458,11 +458,11 @@ public class FarmController {
     public void Changestuff() {
         TreeItem<FarmObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
 
-        if (!selectedItem.equals(rootItem) && selectedItem != null) {
+        if (!selectedItem.equals(rootItem) && selectedItem != null
+                && !selectedItem.getValue().getName().equalsIgnoreCase("Command Center")
+                && !selectedItem.getValue().getName().equalsIgnoreCase("Drone")) {
             if (!entryFieldName.getText().isBlank()) {
                 selectedItem.getValue().setName(entryFieldName.getText());
-                System.out.println(entryFieldName.getText());
-                System.out.println(selectedItem.getValue().getName());
             }
             if (!entryFieldPrice.getText().isBlank()) {
                 selectedItem.getValue().setPrice(Float.parseFloat(entryFieldPrice.getText()));
@@ -506,7 +506,6 @@ public class FarmController {
                 }
             });
         }
-
     }
 
     TreeItem<FarmObject> rootItem;
@@ -518,6 +517,38 @@ public class FarmController {
         rootItem = new TreeItem<>(new FarmObject("Root", 0, 0, 0,
                 0, 0, 0, "Rectangle"));
         treeView.setRoot(rootItem);
+        FarmObject cc = new FarmObject("Command Center", 10000, 400,
+                50, 100,
+                100, 100, "rectangle");
+
+        FarmObject droneThing = new FarmObject("Drone", 10000, 435,
+                100, 100,
+                100, 100, "rectangle");
+
+        TreeItem<FarmObject> commandCenter = new TreeItem<FarmObject>(cc);
+        TreeItem<FarmObject> drone = new TreeItem<FarmObject>(droneThing);
+        rootItem.getChildren().add(commandCenter);
+        commandCenter.getChildren().add(drone);
+
+        Rectangle rectangle = new Rectangle(400, 50,
+                100, 100);
+        anchorPane.getChildren().add(rectangle);
+        rectangle.setStroke(Color.BLACK);
+        rectangle.setFill(Color.TRANSPARENT);
+        Text text = new Text("Command Center");
+        text.setLayoutX(400);
+        text.setLayoutY(50 + 20);
+        anchorPane.getChildren().add(text);
+
+        Rectangle rectangle2 = new Rectangle(435, 100,
+                25, 25);
+        anchorPane.getChildren().add(rectangle2);
+        rectangle2.setStroke(Color.BLACK);
+        rectangle2.setFill(Color.TRANSPARENT);
+        Text text2 = new Text("Drone");
+        text2.setLayoutX(435);
+        text2.setLayoutY(100 + 20);
+        anchorPane.getChildren().add(text2);
 
         treeView.setCellFactory(param -> new TreeCell<FarmObject>() {
 

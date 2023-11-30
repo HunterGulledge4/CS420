@@ -1,10 +1,5 @@
 package com.dashboard.groupfiveproject;
 
-import javafx.geometry.Rectangle2D;
-import javafx.scene.shape.Rectangle;
-
-import java.util.ArrayList;
-
 public class Item extends FarmObject {
 
     public Item(String name, float price, int locationX, int locationY,
