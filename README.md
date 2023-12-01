@@ -1,6 +1,6 @@
 # CS420 - Group 5 Drone Project
 # https://github.com/HunterGulledge4/CS420
-### Welcome to our Drone project!
+## Welcome to our Drone project!
 ## Instructions to Run:
 
 ### 1. Open the link above in a new tab
