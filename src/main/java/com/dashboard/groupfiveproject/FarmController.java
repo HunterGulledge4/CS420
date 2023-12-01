@@ -93,19 +93,17 @@ public class FarmController {
     @FXML
     private Button visitFarmItem;
 
-    // public void startScan() {
-    // // scanFarm.setOnAction(event -> setStartingPosition(-290, -110));
-    // // double InitialSpotX = drone.getCenterX();
-    // // double InitialSpotY = drone.getCenterY();
-    // System.out.println("" + " " + "This is the x coordinate for the command
-    // center");
-    // System.out.println("" + " " + "This is the Y coordinate for the command
-    // center");
-    // // Starting point is top left at x = -290 y = -110
-    // // Field has a total length of = 965
-    // // Field has a total width of = 670
-    // }
+    // Private constructor to prevent instantiation outside this class
+    private static FarmController instance;
 
+    // Singleton Pattern
+    public static synchronized FarmController getInstance() {
+        if (instance == null) {
+            instance = new FarmController();
+        }
+    return instance;
+    }
+    
     public void startScan() {
         Circle circleDrone = new Circle(450, 100, 7);
         circleDrone.setStroke(Color.BLUE);
